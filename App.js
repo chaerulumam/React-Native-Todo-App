@@ -17,6 +17,8 @@ class App extends Component {
     this.state = {
       todo: '',
       todoData: [],
+      editMode: false,
+      index: -1,
     };
   }
 
@@ -50,7 +52,14 @@ class App extends Component {
 
   addData = () => {
     let allData = this.state.todoData;
-    allData.push({title: this.state.todo, status: 'Belum Selesai'});
+
+    if (this.state.editMode) {
+      allData[this.state.index].title = this.state.todo;
+      this.setState({editMode: false});
+    } else {
+      allData.push({title: this.state.todo, status: 'Belum Selesai'});
+    }
+
     this.setState({todoData: allData, todo: ''}, () => this.saveData());
   };
 
@@ -108,9 +117,13 @@ class App extends Component {
                 marginTop: 10,
                 flexDirection: 'row',
               }}>
-              <View style={{flex: 1, justifyContent: 'center'}}>
+              <TouchableOpacity
+                onPress={() =>
+                  this.setState({todo: item.title, index, editMode: true})
+                }
+                style={{flex: 1, justifyContent: 'center'}}>
                 <Text style={{color: '#fafafa'}}>{item.title}</Text>
-              </View>
+              </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => this.check(item, index)}
