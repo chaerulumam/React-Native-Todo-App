@@ -20,6 +20,10 @@ class App extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this.getData();
+  };
+
   check = (item, index) => {
     let allData = this.state.todoData;
     let editItem = item;
