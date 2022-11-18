@@ -47,7 +47,7 @@ class App extends Component {
     let allData = this.state.todoData;
     allData.splice(index, 1);
 
-    this.setState({todoData: allData});
+    this.setState({todoData: allData}, () => this.saveData());
   };
 
   addData = () => {
