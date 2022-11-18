@@ -60,6 +60,20 @@ class App extends Component {
     }
   };
 
+  getData = async () => {
+    try {
+      let value = await AsyncStorage.getItem('@data');
+      value = JSON.parse(value);
+
+      if (value !== null) {
+        this.setState({todoData: value});
+      }
+      console.log('Data berhasil di get');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#212121'}}>
