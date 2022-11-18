@@ -9,29 +9,14 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       todo: '',
-      todoData: [
-        {
-          title: 'Pergi ke Pasar',
-          status: 'Belum Selesai',
-        },
-        {
-          title: 'Pergi ke Kantor',
-          status: 'Belum Selesai',
-        },
-        {
-          title: 'Pergi ke Mesjid',
-          status: 'Selesai',
-        },
-        {
-          title: 'Pergi kerja',
-          status: 'Selesai',
-        },
-      ],
+      todoData: [],
     };
   }
 
@@ -57,6 +42,22 @@ class App extends Component {
     allData.splice(index, 1);
 
     this.setState({todoData: allData});
+  };
+
+  addData = () => {
+    let allData = this.state.todoData;
+    allData.push({title: this.state.todo, status: 'Belum Selesai'});
+    this.setState({todoData: allData, todo: ''}, () => this.saveData());
+  };
+
+  saveData = async () => {
+    try {
+      await AsyncStorage.setItem('@data', JSON.stringify(this.state.todoData));
+
+      console.log('Data berhasil disimpan');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   render() {
@@ -123,7 +124,22 @@ class App extends Component {
             color: '#ffffff',
             marginBottom: 20,
           }}
+          placeholderTextColor={'#fafafa'}
+          placeholder="Masukan todo baru"
         />
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#303030',
+            marginHorizontal: 20,
+            marginBottom: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 3,
+            paddingVertical: 10,
+          }}
+          onPress={() => this.addData()}>
+          <Text style={{color: '#fafafa'}}>Add Todo</Text>
+        </TouchableOpacity>
       </View>
     );
   }
